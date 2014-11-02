@@ -1,0 +1,28 @@
+compute union area of all + circles
+	add areas of all circles
+	identify all ++ intersection pts outside of + circles
+	connect with longest CW arc technique until you meet a starting point, return any "burn in" pts to the pot
+	compute area of polygon (using CW or CCW sign convention)
+	add area of segments
+		if both endpts on the same circle, take the larger
+	add any circles with no intersections
+	add to total
+	
+	subtract small segments
+	
+subtract intersection area with all - circles
+	compute intersection area
+		identify all +-, -- in a +, ++ in a - pts (all pts except -- or ++ in no circles?)
+		start at a point. to pick the next pt
+			consider the two nearest pts along some direction on the circumference of the intersecting circles (say CW)
+			if there are no pts within 180deg on one, then it must be the other
+			if each has a candidate point, pick the farther
+			repeat unitl you get back to the starting point
+		if > 3 points
+			compute the area of the polygon
+			add the area of the segments in the circle shared by the endpts of the line segment
+		if 2 points:
+			compute area of the smaller segments
+		repeat until there are no more segments
+		sum the results from each grouping of points
+		
