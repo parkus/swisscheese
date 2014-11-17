@@ -782,6 +782,7 @@ def circle_intersection_pts(circles):
                 pts = [list(pt)+[i,j] for pt in pts]
                 xpts.extend(pts)
     xpts = np.array(xpts)
+    if len(xpts) == 0: xpts.shape = [0,4]
     
     return xpts, xflags, incircs
 
