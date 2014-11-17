@@ -101,7 +101,7 @@ def circle_circle_pts(circles):
     Parameters
     ----------
     circles : 2x3 array-like
-        [[r0,x0,y0],[r1,x1,y1]] - the radius and center coordinates of the two
+        [[x0,y0,r0],[x1,y1,r1]] - the radius and center coordinates of the two
         circles
         
     Returns
@@ -141,7 +141,7 @@ def circle_circle_area(circles,method='union',xpts=None):
     Parameters
     ----------
     circles : 2x3 array-like
-        [[r0,x0,y0],[r1,x1,y1]] - the radius and center coordinates of the two
+        [[x0,y0,r0],[x1,y1,r1]] - the radius and center coordinates of the two
         circles
     method : {'union'|'u'|'intersection'|'x'|'difference'|'d'}, optional
         'union' or 'u' : computes all of the area covered by the two circles
@@ -223,8 +223,8 @@ def circles_area_union(circles, intersections=None, brute=False):
     Parameters
     ----------
     circles : Nx3 array-like
-        The radius and cetner coordinates of N circles, given as [[r0,x0,y0],
-        [r1,x1,y1],...,[rN,xN,yN]]
+        The radius and cetner coordinates of N circles, given as [[x0,y0,r0],
+        [x1,y1,r1],...,[xN,yN,rN]]
     intersections : list, optional
         The output from cricle_intersection_pts. This parameter is used to
         avoid multiple calls to the computationally intense
@@ -305,7 +305,7 @@ def circleset_area_intersect(circles0, circles1, intersections=None,
     ----------
     circles0, circles1 : Nx3 and Mx3, array like
         The circles that make up each set, specified by their radii and
-        the coordinates of their centers, i.e. [[r0,x0,y0],...,[rN,xN,yN]].
+        the coordinates of their centers, i.e. [[x0,y0,r0],...,[xN,yN,rN]].
     intersections : list, optional
         The output from cricle_intersection_pts when provided with all of the
         circles from both sets. This parameter is used to
@@ -394,10 +394,11 @@ def circleset_area_intersect(circles0, circles1, intersections=None,
     #discard any xpts on loner circles. these circles can be fully within
     #a circle of another set and intersect other circles in that set, so if we
     #don't remove these points they'll get counted twice
-    keep = np.ones(len(edgepts), bool)
-    for c in np.nonzero(loners)[0]:
-        keep = np.logical_and(edgepts[:,2] != c, edgepts[:,3] != c)
-        edgepts = edgepts[keep]        
+    if len(edgepts):
+        keep = np.ones(len(edgepts), bool)
+        for c in np.nonzero(loners)[0]:
+            keep = np.logical_and(edgepts[:,2] != c, edgepts[:,3] != c)
+            edgepts = edgepts[keep]
     
     #compute group and pair areas
     groupareas = __circle_group_areas(circles,edgepts,'intersection',divider)
@@ -418,7 +419,7 @@ def circleset_area_difference(circles0,circles1,intersections=None,
     ----------
     circles0, circles1 : Nx3 and Mx3, array like
         The circles that make up each set, specified by their radii and
-        the coordinates of their centers, i.e. [[r0,x0,y0],...,[rN,xN,yN]].
+        the coordinates of their centers, i.e. [[x0,y0,r0],...,[xN,yN,rN]].
     intersections : list, optional
         The output from cricle_intersection_pts when provided with all of the
         circles from both sets. This parameter is used to
@@ -473,7 +474,7 @@ def circleset_area_subtract(circles, subcircles, intersections=None,
     ----------
     circles : Nx3 array-like
         The circles that make up the base set, specified by their radii and
-        the coordinates of their centers, i.e. [[r0,x0,y0],...,[rN,xN,yN]].
+        the coordinates of their centers, i.e. [[x0,y0,r0],...,[xN,yN,rN]].
     subcircles : Nx3 array-like
         The circles to be subtracted from the base set, specified in the same
         way.
@@ -746,7 +747,7 @@ def circle_intersection_pts(circles):
     ----------
     circles : Nx3 array-like
         The circles in question, specified by their radii and
-        the coordinates of their centers, i.e. [[r0,x0,y0],...,[rN,xN,yN]].
+        the coordinates of their centers, i.e. [[x0,y0,r0],...,[xN,yN,rN]].
     
     Returns
     -------
